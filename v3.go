@@ -58,19 +58,19 @@ func (c *EncryptedDataBagItemV3) Decrypt(key []byte, target interface{}) error {
 	}
 
 	// decode the encrypted data from base64
-	data, err := base64.StdEncoding.DecodeString(c.EncryptedData)
+	data, err := base64.RawStdEncoding.DecodeString(c.EncryptedData)
 	if err != nil {
 		return err
 	}
 
 	// decode iv from base64
-	nonce, err := base64.StdEncoding.DecodeString(c.IV)
+	nonce, err := base64.RawStdEncoding.DecodeString(c.IV)
 	if err != nil {
 		return err
 	}
 
 	// decode the auth tag from base64
-	tag, err := base64.StdEncoding.DecodeString(c.AuthTag)
+	tag, err := base64.RawStdEncoding.DecodeString(c.AuthTag)
 	if err != nil {
 		return err
 	}
