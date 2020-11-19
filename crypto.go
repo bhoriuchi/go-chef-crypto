@@ -152,7 +152,10 @@ func NewSecretKeyBase64(length int) (*string, error) {
 // hash the key
 func hashKey(key []byte) []byte {
 	hash := sha256.New()
-	hash.Write(key)
+	_, err := hash.Write(key)
+	if err != nil {
+		panic(err)
+	}
 	return hash.Sum(nil)
 }
 
@@ -174,7 +177,7 @@ func pkcs7Pad(data []byte, blocklen int) ([]byte, error) {
 	}
 	padlen := 1
 	for ((len(data) + padlen) % blocklen) != 0 {
-		padlen = padlen + 1
+		padlen++
 	}
 
 	pad := bytes.Repeat([]byte{byte(padlen)}, padlen)
