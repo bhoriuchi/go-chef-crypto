@@ -40,9 +40,13 @@ func (c *EncryptedDataBagItemV1) Decrypt(key []byte, target interface{}) error {
 	tgtVal := reflect.ValueOf(target)
 	if tgtVal.Kind() != reflect.Ptr || tgtVal.IsNil() {
 		return ErrInvalidTarget
-	} else if len(key) == 0 {
+	}
+
+	if len(key) == 0 {
 		return ErrInvalidSecretKey
-	} else if c.Cipher != CipherV1 {
+	}
+
+	if c.Cipher != CipherV1 {
 		return fmt.Errorf("invalid data bag cipher: expected %q, got %q", CipherV1, c.Cipher)
 	}
 

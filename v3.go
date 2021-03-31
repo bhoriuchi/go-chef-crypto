@@ -42,9 +42,13 @@ func (c *EncryptedDataBagItemV3) Decrypt(key []byte, target interface{}) error {
 	tgtVal := reflect.ValueOf(target)
 	if tgtVal.Kind() != reflect.Ptr || tgtVal.IsNil() {
 		return ErrInvalidTarget
-	} else if len(key) == 0 {
+	}
+
+	if len(key) == 0 {
 		return ErrInvalidSecretKey
-	} else if c.Cipher != CipherV3 {
+	}
+
+	if c.Cipher != CipherV3 {
 		return fmt.Errorf("invalid data bag cipher: expected %q, got %q", CipherV3, c.Cipher)
 	}
 
@@ -58,19 +62,19 @@ func (c *EncryptedDataBagItemV3) Decrypt(key []byte, target interface{}) error {
 	}
 
 	// decode the encrypted data from base64
-	data, err := base64.RawStdEncoding.DecodeString(c.EncryptedData)
+	data, err := base64.StdEncoding.DecodeString(c.EncryptedData)
 	if err != nil {
 		return err
 	}
 
 	// decode iv from base64
-	nonce, err := base64.RawStdEncoding.DecodeString(c.IV)
+	nonce, err := base64.StdEncoding.DecodeString(c.IV)
 	if err != nil {
 		return err
 	}
 
 	// decode the auth tag from base64
-	tag, err := base64.RawStdEncoding.DecodeString(c.AuthTag)
+	tag, err := base64.StdEncoding.DecodeString(c.AuthTag)
 	if err != nil {
 		return err
 	}
